@@ -14,11 +14,13 @@ struct DetailView: View {
             Text("User ID : \(viewModel.user.userId)")
             Text("Id : \(viewModel.user.id)")
             Text("Title : \(viewModel.user.title)")
+                .multilineTextAlignment(.center)
             Text("Body : \(viewModel.user.body)")
-        }
+                .multilineTextAlignment(.center)
+        }.padding()
     }
 }
 
 #Preview {
-    DetailView(viewModel: DetailViewModel(user: User(userId: "1", id: "1", title: "Title", body: "Body")))
+    DetailView(viewModel: DetailViewModel(user: User(userId: 1, id: 1, title: "Title", body: "Body")))
 }

@@ -12,6 +12,7 @@ struct ChildComponent: View {
     var body: some View {
         HStack{
             Text(title)
+                .multilineTextAlignment(.leading)
             Spacer()
             Image(systemName: "chevron.right")
         }

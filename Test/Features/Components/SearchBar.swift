@@ -11,6 +11,8 @@ struct SearchBar: View {
     @Binding var searchString : String
     var body: some View {
         TextField("Search", text: $searchString)
+            .autocorrectionDisabled()
+            .textInputAutocapitalization(.never)
     }
 }
 

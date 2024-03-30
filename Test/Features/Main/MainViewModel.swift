@@ -8,9 +8,11 @@
 import Foundation
 
 class MainViewModel: ObservableObject {
-    var users : [User]
+    @Published var users : [User]
     @Published var filteredUser : [User] = []
     @Published var searchString : String = ""
+    @Published var isLoading : Bool = true
+    
     init(users: [User]) {
         self.users = users
         self.filteredUser = users
@@ -21,18 +23,21 @@ class MainViewModel: ObservableObject {
             filteredUser = users
         } else {
             filteredUser = users.filter({ user in
-                user.title.contains(searchString)
+                user.title.lowercased().contains(searchString.lowercased())
             })
         }
         
     }
     
     func fetchData() {
+        self.isLoading = true
         URLSession.shared.fetchData(at: URL(string: "https://jsonplaceholder.typicode.com/posts")!) { [self] result in
             switch result {
-            case .success(let success):
-                Task{
-                    self.users = success
+            case .success(let users):
+                DispatchQueue.main.async {
+                    self.users = users
+                    self.filteredUser = users
+                    self.isLoading = false
                     self.objectWillChange.send()
                 }
             case .failure(let error):

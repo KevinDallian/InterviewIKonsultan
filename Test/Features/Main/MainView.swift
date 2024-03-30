@@ -8,21 +8,23 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject var viewModel = MainViewModel(users: [User(userId: "1", id: "1", title: "Title 1", body: "Body"),
-                                                       User(userId: "1", id: "2", title: "123", body: "Body"),
-                                                       User(userId: "1", id: "3", title: "Ear", body: "Body")])
+    @StateObject var viewModel = MainViewModel(users: [])
     var body: some View {
         VStack{
-            SearchBar(searchString: $viewModel.searchString)
-            ForEach(viewModel.filteredUser) { user in
-                NavigationLink {
-                    DetailView(viewModel: DetailViewModel(user: user))
-                } label: {
-                    ChildComponent(title: user.title)
+            if viewModel.isLoading {
+                EmptyView()
+            } else {
+                SearchBar(searchString: $viewModel.searchString)
+                ForEach(viewModel.filteredUser) { user in
+                    NavigationLink {
+                        DetailView(viewModel: DetailViewModel(user: user))
+                    } label: {
+                        ChildComponent(title: user.title)
+                    }
                 }
-            }
-            .onChange(of: viewModel.searchString) { _,_ in
-                viewModel.searchUser()
+                .onChange(of: viewModel.searchString) { _,_ in
+                    viewModel.searchUser()
+                }
             }
         }
         .onAppear {
